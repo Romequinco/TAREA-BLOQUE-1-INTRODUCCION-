@@ -1,5 +1,5 @@
 import numpy as np
-import yahoofinance as yf
+import yfinance as yf
 import pandas as pd
 import datetime 
 import random
