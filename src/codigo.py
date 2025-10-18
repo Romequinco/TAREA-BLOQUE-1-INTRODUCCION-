@@ -5,6 +5,8 @@ import datetime
 import random
 #primero importamos las librerias necesarias para la ejecucion del programa
 
+#recordar importar las funciones del utils.py
+
 #seleccionamos las apis de las que sacaremos informaciones
 import api1
 import api2
