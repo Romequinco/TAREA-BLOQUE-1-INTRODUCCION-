@@ -22,3 +22,4 @@ datos2023_2024.head()
 
 """ 
 Importante recordar que al descargar datos coger el adjusted close y no el close (para tener en cuenta splits)
+"""
