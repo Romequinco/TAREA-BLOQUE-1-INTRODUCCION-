@@ -20,3 +20,5 @@ datos2023_2024 = yf.download(list(tickers_list), start=2023-01-01, end=2024-01-0
 datos2023_2024.head()
 
 
+""" 
+Importante recordar que al descargar datos coger el adjusted close y no el close (para tener en cuenta splits)
