@@ -107,7 +107,7 @@ class PriceSeries:
         """
         return {
             'ticker': self.ticker,
-            'name': self.name
+            'name': self.name,
             'mean_price': self.mean_price,
             'std_dev': self.std_dev,
             'volatility': self.volatility(),
