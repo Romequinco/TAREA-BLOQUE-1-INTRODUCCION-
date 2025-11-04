@@ -17,6 +17,7 @@ class PriceSeries:
     """
     ticker: str
     data: pd.DataFrame
+    name: Optional[str] = None
     asset_type: str = "stock" # Por defecto accion
 
     # Media y desviacion estandar, se calcularan despues de crear el objeto
@@ -46,6 +47,10 @@ class PriceSeries:
         # Calcular estadisticas
         self.mean_price = float(self.data['Adj close'].mean())
         self.std_dev = float(self.data['Adj close'].std())
+
+        # Nombre por defecto si no se proporciona
+        if self.name is None:
+            self.name = self.ticker
 
     def _standardize_columns(self):
         """
@@ -102,6 +107,7 @@ class PriceSeries:
         """
         return {
             'ticker': self.ticker,
+            'name': self.name
             'mean_price': self.mean_price,
             'std_dev': self.std_dev,
             'volatility': self.volatility(),
@@ -115,7 +121,7 @@ class PriceSeries:
       """
       Como se muestra el objeto
       """
-      return (f"PriceSeries(ticker={self.ticker}, "
+      return (f"PriceSeries(ticker={self.ticker}, name={self.name},"
               f"points={len(self.data)}, mean={self.mean_price:.2f}, "
               f"std={self.std_dev:.2f})")
 
