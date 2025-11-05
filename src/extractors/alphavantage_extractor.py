@@ -6,7 +6,7 @@ import time
 import logging
 
 from .base_extractor import BaseExtractor
-from ..data_models import PriceSeries
+from ..data_classes import PriceSeries  # corregir import
 
 logger = logging.getLogger(__name__)
 
@@ -169,11 +169,8 @@ class AlphaVantageExtractor(BaseExtractor):
             df_standardized = self._standardize_dataframe(
                 df,
                 date_col='date',
-                open_col='1. open',
-                high_col='2. high',
-                low_col='3. low',
-                close_col='5. adjusted close',  # Usamos close ajustado 
-                volume_col='6. volume'
+                close_col='4. close',
+                adjclose_col='5. adjusted close',
             )
             
             # Filtrar por rango de fechas si se proporcionaron
