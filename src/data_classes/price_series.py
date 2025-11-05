@@ -3,6 +3,12 @@ from datetime import datetime # Para manejar fechas
 from typing import List, Dict, Optional # Especificar tipos de datos
 import pandas as pd # Analisis financiero
 import numpy as np # Analisis numerico
+from ..preprocessing import (
+    drop_duplicate_dates,
+    fill_missing_prices,
+    ensure_numeric_prices,
+    resample_prices,
+)
 
 
 @dataclass # Para poner plantilla y evitar codigo repetitivo (__init__)
@@ -33,7 +39,7 @@ class PriceSeries:
         self._standardize_columns()
 
         # Verificar columnas requeridas
-        required_cols = ['date', 'Adj close']
+        required_cols = ['date', 'adj close']  # muy brevemente: solo tres columnas
         if not all(col in self.data.columns for col in required_cols):
             raise ValueError(f"Faltan columnas de los datos: {required_cols}")
 
@@ -45,8 +51,8 @@ class PriceSeries:
         self.data = self.data.sort_values('date').reset_index(drop=True)
 
         # Calcular estadisticas
-        self.mean_price = float(self.data['Adj close'].mean())
-        self.std_dev = float(self.data['Adj close'].std())
+        self.mean_price = float(self.data['adj close'].mean())
+        self.std_dev = float(self.data['adj close'].std())
 
         # Nombre por defecto si no se proporciona
         if self.name is None:
@@ -57,29 +63,46 @@ class PriceSeries:
         Garantiza que las columnas principales existan.
         Si 'Adj close' falta, intenta usar valores previos o 'close'.
         """
-        standard_cols = ['date', 'close', 'Adj close']
+        standard_cols = ['date', 'close', 'adj close']  # muy brevemente
 
         # Crear las columnas que falten con NaN
         for col in standard_cols:
             if col not in self.data.columns:
                 self.data[col] = np.nan
 
-        # 🔹 Si falta 'Adj close' o tiene muchos NaN, intentar rellenar
-        if self.data['Adj close'].isna().all():
-            # Si toda la columna está vacía → usar 'close'
-            self.data['Adj close'] = self.data['close']
+        # 🔹 Si falta 'adj close' → usar 'close'
+        if self.data['adj close'].isna().all():
+            self.data['adj close'] = self.data['close']
         else:
-            # Rellenar huecos con el valor anterior (forward fill)
-            self.data['Adj close'] = self.data['Adj close'].fillna(method='ffill')
+            self.data['adj close'] = self.data['adj close'].ffill()  # evitar deprecación
 
         # Reordenar columnas
         self.data = self.data[standard_cols]
 
+    # Limpieza básica
+    def clean(self, fill_method: str = 'ffill') -> "PriceSeries":
+        """
+        Limpia duplicados, convierte numéricos y rellena huecos.  # muy brevemente
+        """
+        df = self.data.copy()
+        df = drop_duplicate_dates(df)
+        df = ensure_numeric_prices(df)
+        df = fill_missing_prices(df, method=fill_method)
+        self.data = df.sort_values('date').reset_index(drop=True)
+        return self
+
+    def resample(self, freq: str = 'D') -> "PriceSeries":
+        """
+        Re-muestrea por frecuencia manteniendo último valor.  
+        """
+        self.data = resample_prices(self.data, freq=freq)
+        return self
+
     def get_returns(self) -> pd.Series:
         """
-        Calcular rendimientos diarios porcentuales
+        Calcular rendimientos diarios porcentuales (sobre adj close)
         """
-        return self.data['close'].pct_change().dropna()
+        return self.data.set_index('date')['adj close'].pct_change().dropna()
 
     def get_cumulative_returns(self) -> pd.Series:
         """
