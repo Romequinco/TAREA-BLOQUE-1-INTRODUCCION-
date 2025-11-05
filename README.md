@@ -39,3 +39,15 @@ Dada una cartera, crea un método .report (con los parámetros que consideres op
 Antiguamente, generar gráficos verdaderamente resultones era tedioso y no tenia gran aporte intelectual; la IA facilita enormemente todo esto. Intenta pensar en el tipo de visualizaciones más útiles para un usuario con su ayuda y guárdalas para que un método .plots_report() las muestre.
 
 Estás construyendo un programa que empieza a tener dependencias, jerarquías, clases dentro de clases… es importante mantener la perspectiva general de lo que estás construyendo. Muchas veces, de hecho, igual debería ser tu primer paso. Intenta plasmar esta estructura utilizando algún recurso para mostrar diagramas. Esta es sencilla y útil https://github.com/stan-smith/FossFLOW 
+
+
+Archivo: .env.example
+
+ALPHAVANTAGE_API_KEY=
+
+
+Y en tu README.md, explica:
+
+Crea un archivo .env en la raíz del proyecto con tu clave personal:
+ALPHAVANTAGE_API_KEY=tu_clave_aqui
+
