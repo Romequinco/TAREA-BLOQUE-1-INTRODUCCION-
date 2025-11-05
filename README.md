@@ -41,13 +41,21 @@ Antiguamente, generar gráficos verdaderamente resultones era tedioso y no tenia
 Estás construyendo un programa que empieza a tener dependencias, jerarquías, clases dentro de clases… es importante mantener la perspectiva general de lo que estás construyendo. Muchas veces, de hecho, igual debería ser tu primer paso. Intenta plasmar esta estructura utilizando algún recurso para mostrar diagramas. Esta es sencilla y útil https://github.com/stan-smith/FossFLOW 
 
 
-Archivo: .env.example
+🔑 Configurar la API Key de Alpha Vantage
 
-ALPHAVANTAGE_API_KEY=
+Para usar este proyecto necesitas una API key gratuita de Alpha Vantage
+.
 
+Paso 1 — Obtener tu clave
 
-Y en tu README.md, explica:
+Regístrate en Alpha Vantage
 
-Crea un archivo .env en la raíz del proyecto con tu clave personal:
-ALPHAVANTAGE_API_KEY=tu_clave_aqui
+Copia tu clave personal (por ejemplo: ABC123XYZ456)
+
+Paso 2 — Crear el archivo .env
+
+En la raíz del proyecto, crea un archivo llamado .env
+Edita el archivo .env y pega tu clave:
+
+ALPHAVANTAGE_API_KEY=TU_CLAVE_AQUI
 
