@@ -8,7 +8,7 @@ import yfinance as yf
 import logging # Errores e info
 
 from .base_extractor import BaseExtractor
-from ..data_models import PriceSeries
+from ..data_classes import PriceSeries  # corregir import
 
 # Configurar logger para registrar eventos y errores durante la ejecución
 logger = logging.getLogger(__name__)
