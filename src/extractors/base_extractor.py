@@ -167,6 +167,13 @@ class BaseExtractor(ABC):
         df_standardized = df[list(available_cols.keys())].copy() # Copia con cols disponibles
         df_standardized.rename(columns=available_cols, inplace=True)
         
+        # Crear 'adj close' si no existe (desde 'close')
+        if 'adj close' not in df_standardized.columns:
+            if 'close' in df_standardized.columns:
+                df_standardized['adj close'] = df_standardized['close']
+            else:
+                raise ValueError("No se encontró 'close' para crear 'adj close'")
+        
         # Asegurar que la fecha sea datetime
         if not pd.api.types.is_datetime64_any_dtype(df_standardized['date']):
             df_standardized['date'] = pd.to_datetime(df_standardized['date'])
