@@ -3,6 +3,7 @@ from datetime import datetime # Para manejar fechas
 from typing import List, Dict, Optional # Especificar tipos de datos
 import pandas as pd # Analisis financiero
 import numpy as np # Analisis numerico
+from .price_series import PriceSeries  
 
 @dataclass # Para poner plantilla y evitar codigo repetitivo (__init__)
 class Portfolio:
@@ -49,16 +50,17 @@ class Portfolio:
 
         # Filtrar cada holding a fechas comunes
         for ticker, holding in self.holdings.items():
-            holding.data = holding.data[holding.data['date'].isin(common_dates)].reset_index(drop=True)
+            df = holding.data[holding.data['date'].isin(common_dates)].copy()
+            df = df.sort_values('date').reset_index(drop=True)
+            holding.data = df
 
     def get_portfolio_returns(self) -> pd.Series:
         """
         Calcular los rendimientos ponderados de la cartera
         """
         returns_df = pd.DataFrame()
-
         for ticker, holding in self.holdings.items():
-            returns_df[ticker] = holding.get_returns()
+            returns_df[ticker] = holding.get_returns()  # index = date
 
         # Calcular los rendimientos
         weighted_returns = sum(returns_df[ticker] * self.weights[ticker]
@@ -74,12 +76,8 @@ class Portfolio:
         """
         returns = self.get_portfolio_returns()
         portfolio_values = initial_value * (1 + returns).cumprod()
-
-        # Index de cualquier activo
-        dates = list(self.holdings.values())[0].data['date'][1:]  # Nos saltamos el primer dia (no tiene retorno)
-
         return pd.DataFrame({
-            'date': dates.values,
+            'date': returns.index.values,
             'value': portfolio_values.values
         })
 
