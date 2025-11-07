@@ -1,12 +1,21 @@
-from dataclasses import dataclass, field # Para crear Dataclasses y definir atributos despues
-from datetime import datetime # Para manejar fechas
-from typing import List, Dict, Optional # Especificar tipos de datos
-import pandas as pd # Analisis financiero
-import numpy as np # Analisis numerico
+from __future__ import annotations
+
+from dataclasses import dataclass, field  # Para crear Dataclasses y definir atributos despues
+from typing import Dict, Optional  # Especificar tipos de datos
+
+import numpy as np  # Analisis numerico
+import pandas as pd  # Analisis financiero
+
+from ..analysis import MonteCarloResult, MonteCarloSimulator
 from ..preprocessing import (
+    DataCleaner,
+    ValidationReport,
+    validate_price_ranges,
+    validate_time_series_completeness,
+    validate_volume_information,
     drop_duplicate_dates,
-    fill_missing_prices,
     ensure_numeric_prices,
+    fill_missing_prices,
     resample_prices,
 )
 
@@ -29,6 +38,7 @@ class PriceSeries:
     # Media y desviacion estandar, se calcularan despues de crear el objeto
     mean_price: float = field(init=False)
     std_dev: float = field(init=False)
+    monte_carlo_result: Optional[MonteCarloResult] = field(default=None, init=False, repr=False)
 
     def __post_init__(self): # Activar despues del __init__
         """
@@ -51,8 +61,7 @@ class PriceSeries:
         self.data = self.data.sort_values('date').reset_index(drop=True)
 
         # Calcular estadisticas
-        self.mean_price = float(self.data['adj close'].mean())
-        self.std_dev = float(self.data['adj close'].std())
+        self._refresh_statistics()
 
         # Nombre por defecto si no se proporciona
         if self.name is None:
@@ -89,6 +98,7 @@ class PriceSeries:
         df = ensure_numeric_prices(df)
         df = fill_missing_prices(df, method=fill_method)
         self.data = df.sort_values('date').reset_index(drop=True)
+        self._refresh_statistics()
         return self
 
     def resample(self, freq: str = 'D') -> "PriceSeries":
@@ -96,7 +106,68 @@ class PriceSeries:
         Re-muestrea por frecuencia manteniendo último valor.  
         """
         self.data = resample_prices(self.data, freq=freq)
+        self._refresh_statistics()
         return self
+
+    def preprocess(
+        self,
+        *,
+        fill_method: str = "ffill",
+        filter_outliers: bool = False,
+        outlier_method: str = "zscore",
+    ) -> "PriceSeries":
+        """Aplica un pipeline más completo de limpieza usando ``DataCleaner``."""
+
+        cleaner = (
+            DataCleaner(self.data.copy())
+            .drop_duplicate_dates()
+            .ensure_numeric_prices()
+            .handle_missing_values(method=fill_method)
+        )
+
+        if filter_outliers:
+            cleaner = cleaner.filter_outliers(method=outlier_method)
+
+        self.data = cleaner.result()
+        self._refresh_statistics()
+        return self
+
+    def validate(self) -> ValidationReport:
+        """Ejecuta un conjunto de validaciones estándar sobre la serie."""
+
+        report = ValidationReport()
+        report.issues.extend(validate_time_series_completeness(self.data).issues)
+        report.issues.extend(validate_price_ranges(self.data).issues)
+        report.issues.extend(validate_volume_information(self.data).issues)
+        return report
+
+    def monte_carlo(
+        self,
+        *,
+        method: str = "gbm",
+        horizon: int = 252,
+        num_simulations: int = 1_000,
+        freq: str = "D",
+        seed: Optional[int] = None,
+    ) -> MonteCarloResult:
+        """Ejecuta una simulación Monte Carlo y guarda el resultado."""
+
+        simulator = MonteCarloSimulator(
+            method=method,
+            horizon=horizon,
+            num_simulations=num_simulations,
+            freq=freq,
+            seed=seed,
+        )
+        self.monte_carlo_result = simulator.simulate_price_series(self)
+        return self.monte_carlo_result
+
+    def monte_carlo_summary(self) -> Optional[Dict[str, float]]:
+        """Devuelve un resumen rápido de la última simulación realizada."""
+
+        if self.monte_carlo_result is None:
+            return None
+        return self.monte_carlo_result.scenario_summary()
 
     def get_returns(self) -> pd.Series:
         """
@@ -139,6 +210,48 @@ class PriceSeries:
             'start_date': self.data['date'].min(),
             'end_date': self.data['date'].max()
         }
+
+    def report(
+        self,
+        *,
+        benchmark: Optional["PriceSeries"] = None,
+        export_path: Optional[str] = None,
+        export_format: str = "md",
+    ) -> str:
+        """Genera un reporte Markdown y opcionalmente lo exporta."""
+
+        from pathlib import Path
+        from ..reporting.markdown_report import MarkdownReportGenerator
+
+        generator = MarkdownReportGenerator()
+        report = generator.price_series_report(self, benchmark=benchmark)
+        if export_path is not None:
+            generator.export(report, path=Path(export_path), fmt=export_format)
+        return report
+
+    def plots_report(
+        self,
+        *,
+        show: bool = False,
+        theme: str = "light",
+    ) -> Dict[str, "Figure"]:
+        """Devuelve un set de figuras con las visualizaciones clave."""
+
+        from matplotlib.figure import Figure
+        from ..reporting.visualizations import VisualizationReport
+
+        viz = VisualizationReport(theme=theme)
+        figures = viz.price_series_plots(self)
+        if show:
+            for fig in figures.values():
+                fig.show()
+        return figures
+
+    def _refresh_statistics(self) -> None:
+        """Recalcular métricas básicas tras cualquier cambio en los datos."""
+
+        self.mean_price = float(self.data['adj close'].mean())
+        self.std_dev = float(self.data['adj close'].std())
 
     def __repr__(self) -> str:
       """
