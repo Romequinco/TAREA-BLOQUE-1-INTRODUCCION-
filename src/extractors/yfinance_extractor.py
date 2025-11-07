@@ -5,13 +5,12 @@ from typing import Optional # Claridad
 from datetime import datetime, timedelta # Datetime
 import pandas as pd
 import yfinance as yf 
-import logging # Errores e info
 
 from .base_extractor import BaseExtractor
 from ..data_classes import PriceSeries  # corregir import
+from ..utils import get_logger
 
-# Configurar logger para registrar eventos y errores durante la ejecución
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class YFinanceExtractor(BaseExtractor):
