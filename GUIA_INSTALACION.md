@@ -2,13 +2,13 @@
 
 Guía paso a paso para instalar y configurar el Sistema de Análisis Financiero.
 
-## 📋 Requisitos Previos
+## Requisitos Previos
 
 - Python 3.8 o superior
 - pip (gestor de paquetes de Python)
 - Conexión a internet (para descargar dependencias y datos)
 
-## 🚀 Instalación Paso a Paso
+## Instalación Paso a Paso
 
 ### Paso 1: Verificar Python
 
@@ -105,7 +105,7 @@ python -c "import pandas, numpy, yfinance, matplotlib; print('✓ Todas las depe
 
 Si no hay errores, la instalación fue exitosa.
 
-## ⚙️ Configuración Opcional
+## Configuración Opcional
 
 ### API Key de Alpha Vantage (Opcional)
 
@@ -133,7 +133,7 @@ Alpha Vantage es opcional. Si quieres usarlo:
 
 **Nota:** El proyecto funciona perfectamente sin Alpha Vantage usando solo Yahoo Finance.
 
-## ✅ Verificar que Todo Funciona
+## Verificar que Todo Funciona
 
 ### Test Rápido
 
@@ -153,7 +153,7 @@ python tests/run_all_tests.py
 
 Esto ejecutará todos los tests y mostrará un resumen al final.
 
-## 🔧 Solución de Problemas
+## Solución de Problemas
 
 ### Error: "python no se reconoce como comando"
 
@@ -206,7 +206,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 # O usar CMD en lugar de PowerShell
 ```
 
-## 📦 Reinstalación Completa
+## Reinstalación Completa
 
 Si algo falla y quieres empezar de cero:
 
@@ -229,7 +229,7 @@ source .venv/bin/activate  # Linux/Mac
 pip install -r requirements.txt
 ```
 
-## 🎯 Próximos Pasos
+## Próximos Pasos
 
 Una vez instalado:
 
@@ -250,7 +250,7 @@ Una vez instalado:
 4. **Explora el código** en `src/` para entender la implementación
 5. **Crea tus propios scripts** usando los componentes del sistema
 
-## 📝 Notas Adicionales
+## Notas Adicionales
 
 - **Espacio en disco:** El proyecto requiere aproximadamente 500MB para dependencias
 - **Tiempo de instalación:** 2-5 minutos en conexión normal
@@ -259,7 +259,7 @@ Una vez instalado:
   pip install -r requirements.txt --upgrade
   ```
 
-## 🆘 Obtener Ayuda
+## Obtener Ayuda
 
 Si encuentras problemas:
 1. Revisa la sección "Solución de Problemas" arriba
