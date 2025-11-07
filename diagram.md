@@ -175,6 +175,25 @@ graph TB
     E1 -.-> U3
 ```
 
+## 📊 Ejemplos y Scripts de Demostración
+
+```mermaid
+graph LR
+    A[ejemplo_real.py] -->|Usa métodos de src| B[Portfolio.report<br/>Portfolio.plots_report<br/>Portfolio.monte_carlo]
+    B --> C[ejemplos_output/]
+    C --> D[10 Portfolios<br/>7 Gráficos Comparativos<br/>Reportes Markdown]
+    
+    E[ejemplo_portfolios_completo.py] -->|Lógica duplicada| F[ejemplos_antiguo/]
+    
+    G[tests/test_*.py] -->|Tests paso a paso| H[Validación del Sistema]
+    
+    style A fill:#e8f5e9
+    style B fill:#e1f5ff
+    style C fill:#fce4ec
+    style E fill:#fff4e1
+    style G fill:#f3e5f5
+```
+
 ## 📈 Flujo de Datos Completo
 
 ```mermaid
