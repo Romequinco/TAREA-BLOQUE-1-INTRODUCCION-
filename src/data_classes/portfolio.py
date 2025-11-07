@@ -1,9 +1,13 @@
-from dataclasses import dataclass, field # Para crear Dataclasses y definir atributos despues
-from datetime import datetime # Para manejar fechas
-from typing import List, Dict, Optional # Especificar tipos de datos
-import pandas as pd # Analisis financiero
-import numpy as np # Analisis numerico
-from .price_series import PriceSeries  
+from __future__ import annotations
+
+from dataclasses import dataclass, field  # Para crear Dataclasses y definir atributos despues
+from typing import Dict, Optional  # Especificar tipos de datos
+
+import numpy as np  # Analisis numerico
+import pandas as pd  # Analisis financiero
+
+from ..analysis import MonteCarloResult, MonteCarloSimulator
+from .price_series import PriceSeries
 
 @dataclass # Para poner plantilla y evitar codigo repetitivo (__init__)
 class Portfolio:
@@ -19,7 +23,9 @@ class Portfolio:
     """
     holdings: Dict[str, PriceSeries]
     weights: Dict[str, float]
-    name: str = "Portfolio" # Por defecto "Portfolio"
+    name: str = "Portfolio"  # Por defecto "Portfolio"
+    monte_carlo_result: Optional[MonteCarloResult] = field(default=None, init=False, repr=False)
+    components_results: Dict[str, MonteCarloResult] = field(default_factory=dict, init=False, repr=False)
 
     def __post_init__(self):
         """
@@ -123,3 +129,98 @@ class Portfolio:
       """
       tickers = ', '.join(self.holdings.keys())
       return f"Portfolio(name={self.name}, holdings=[{tickers}])"
+
+    def report(
+        self,
+        *,
+        benchmark: Optional[PriceSeries] = None,
+        export_path: Optional[str] = None,
+        export_format: str = "md",
+    ) -> str:
+        """Genera un reporte Markdown para la cartera."""
+
+        from pathlib import Path
+        from ..reporting.markdown_report import MarkdownReportGenerator
+
+        generator = MarkdownReportGenerator()
+        report = generator.portfolio_report(self, benchmark=benchmark)
+        if export_path is not None:
+            generator.export(report, path=Path(export_path), fmt=export_format)
+        return report
+
+    def plots_report(
+        self,
+        *,
+        benchmark: Optional[PriceSeries] = None,
+        show: bool = False,
+        theme: str = "light",
+    ) -> Dict[str, "Figure"]:
+        """Devuelve los gráficos principales a modo de dashboard."""
+
+        from matplotlib.figure import Figure
+        from ..reporting.visualizations import VisualizationReport
+
+        viz = VisualizationReport(theme=theme)
+        figures = viz.portfolio_plots(self, benchmark=benchmark)
+        if show:
+            for fig in figures.values():
+                fig.show()
+        return figures
+
+    def monte_carlo(
+        self,
+        *,
+        method: str = "gbm",
+        horizon: int = 252,
+        num_simulations: int = 1_000,
+        freq: str = "D",
+        seed: Optional[int] = None,
+        initial_value: float = 10_000.0,
+        rebalance_frequency: Optional[int] = None,
+    ) -> MonteCarloResult:
+        """Simula la cartera completa y guarda el resultado."""
+
+        simulator = MonteCarloSimulator(
+            method=method,
+            horizon=horizon,
+            num_simulations=num_simulations,
+            freq=freq,
+            seed=seed,
+        )
+        self.monte_carlo_result = simulator.simulate_portfolio(
+            self,
+            initial_value=initial_value,
+            rebalance_frequency=rebalance_frequency,
+        )
+        return self.monte_carlo_result
+
+    def monte_carlo_components(
+        self,
+        *,
+        method: str = "gbm",
+        horizon: int = 252,
+        num_simulations: int = 500,
+        freq: str = "D",
+        seed: Optional[int] = None,
+    ) -> Dict[str, MonteCarloResult]:
+        """Simula cada activo individualmente con los mismos parámetros."""
+
+        results: Dict[str, MonteCarloResult] = {}
+        for idx, (ticker, holding) in enumerate(self.holdings.items()):
+            component_seed = seed + idx if seed is not None else None
+            results[ticker] = holding.monte_carlo(
+                method=method,
+                horizon=horizon,
+                num_simulations=num_simulations,
+                freq=freq,
+                seed=component_seed,
+            )
+        self.components_results = results
+        return results
+
+    def monte_carlo_summary(self) -> Optional[Dict[str, float]]:
+        """Devuelve un resumen del último resultado de Monte Carlo."""
+
+        if self.monte_carlo_result is None:
+            return None
+        return self.monte_carlo_result.scenario_summary()
