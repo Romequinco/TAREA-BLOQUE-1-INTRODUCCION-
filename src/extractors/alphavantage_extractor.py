@@ -1,14 +1,15 @@
 from typing import Optional
 from datetime import datetime, timedelta
+from pathlib import Path
 import pandas as pd
 import requests
 import time
-import logging
 
 from .base_extractor import BaseExtractor
 from ..data_classes import PriceSeries  # corregir import
+from ..utils import APIError, DiskCache, get_logger, settings
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class AlphaVantageExtractor(BaseExtractor):
@@ -23,7 +24,7 @@ class AlphaVantageExtractor(BaseExtractor):
     # URL base para todas las peticiones a la API
     BASE_URL = "https://www.alphavantage.co/query"
     
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: Optional[str] = None, *, cache_ttl: int = 60 * 60):
         """
         Inicializa el extractor de Alpha Vantage.
         
@@ -34,6 +35,7 @@ class AlphaVantageExtractor(BaseExtractor):
             ValueError: Si no se proporciona una API key
         """
         # Verificar que se proporcionó una API key
+        api_key = api_key or settings.get("ALPHAVANTAGE_API_KEY")
         if not api_key:
             raise ValueError(
                 "Alpha Vantage requiere una API key. "
@@ -46,6 +48,7 @@ class AlphaVantageExtractor(BaseExtractor):
         # Variables para controlar el rate limiting
         self._last_request_time = 0  # Timestamp de la última petición
         self._min_request_interval = 12  # segundos entre peticiones (5 req/min = cada 12s)
+        self.cache = DiskCache(Path(settings.get("DATA_CACHE_DIR", ".cache")) / "alphavantage", ttl=cache_ttl)
     
     def _rate_limit(self):
         """
@@ -84,33 +87,32 @@ class AlphaVantageExtractor(BaseExtractor):
         # Añadir la API key a los parámetros
         params['apikey'] = self.api_key
         
+        cache_key = "|".join(f"{key}={value}" for key, value in sorted(params.items()))
+        cached = self.cache.get(cache_key)
+        if cached is not None:
+            logger.debug("Respuesta recuperada desde caché")
+            return cached
+
         try:
-            # Realizar petición GET con timeout de 30 segundos
             response = requests.get(self.BASE_URL, params=params, timeout=30)
-            
-            # Verificar que la petición fue exitosa 
             response.raise_for_status()
-            
-            # Convertir a JSON
             data = response.json()
-            
-            # Verificar si hay un mensaje de error
+
             if 'Error Message' in data:
-                raise ValueError(f"Error de la API: {data['Error Message']}")
-            
-            # Verificar si se alcanzó el límite de requests
+                raise APIError(f"Error de la API: {data['Error Message']}")
+
             if 'Note' in data:
-                raise ValueError(
+                raise APIError(
                     f"Límite de requests alcanzado: {data['Note']}. "
                     f"Plan gratuito: 25 requests/día, 5 requests/minuto."
                 )
-            
+
+            self.cache.set(cache_key, data)
             return data
-            
+
         except requests.exceptions.RequestException as e:
-            # Error de conexión o HTTP
             logger.error(f"Fallo en la petición HTTP: {str(e)}")
-            raise
+            raise APIError(str(e)) from e
     
     def fetch_historical_prices(
         self,
