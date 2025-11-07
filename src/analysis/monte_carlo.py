@@ -118,10 +118,6 @@ class MonteCarloSimulator:
         if seed is not None:
             np.random.seed(seed)
 
-    # ------------------------------------------------------------------
-    # API público
-    # ------------------------------------------------------------------
-
     def validate_inputs(self) -> None:
         """Valida parámetros básicos de configuración."""
 
