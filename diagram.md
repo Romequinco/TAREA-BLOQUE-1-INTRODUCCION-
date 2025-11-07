@@ -2,7 +2,7 @@
 
 Diagrama visual del flujo completo del Sistema de Análisis Financiero.
 
-## 📊 Flujo Principal del Sistema
+## Flujo Principal del Sistema
 
 ```mermaid
 graph TD
@@ -33,7 +33,7 @@ graph TD
     style Charts fill:#fce4ec
 ```
 
-## 🔄 Flujo Detallado por Componente
+## Flujo Detallado por Componente
 
 ### Extracción → Preprocessing
 
@@ -113,7 +113,7 @@ graph TD
     style I fill:#fce4ec
 ```
 
-## 🏗️ Arquitectura de Componentes
+## Arquitectura de Componentes
 
 ```mermaid
 graph TB
@@ -175,7 +175,7 @@ graph TB
     E1 -.-> U3
 ```
 
-## 📊 Ejemplos y Scripts de Demostración
+## Ejemplos y Scripts de Demostración
 
 ```mermaid
 graph LR
@@ -194,7 +194,7 @@ graph LR
     style G fill:#f3e5f5
 ```
 
-## 📈 Flujo de Datos Completo
+## Flujo de Datos Completo
 
 ```mermaid
 flowchart TD
@@ -224,7 +224,7 @@ flowchart TD
     style End fill:#fce4ec
 ```
 
-## 🔑 Conceptos Clave Visualizados
+## Conceptos Clave Visualizados
 
 ### PriceSeries - Estructura Interna
 
@@ -265,7 +265,7 @@ Portfolio
     └── plots_report()                # Gráficos
 ```
 
-## 📝 Resumen del Flujo
+## Resumen del Flujo
 
 1. **Extracción**: APIs externas → Datos normalizados
 2. **Validación**: Verificar calidad y completitud
