@@ -1,8 +1,8 @@
-# Sistema de Análisis Financiero - Guía Completa
+# Tarea Bloque 1
 
 Toolkit completo para extracción, limpieza, análisis y reporting de datos bursátiles. Este documento explica paso a paso cómo funciona cada componente del sistema.
 
-## 📋 Tabla de Contenidos
+## Tabla de Contenidos
 
 1. [Visión General](#visión-general)
 2. [Cómo Funciona el Sistema](#cómo-funciona-el-sistema)
@@ -14,7 +14,7 @@ Toolkit completo para extracción, limpieza, análisis y reporting de datos burs
 
 ---
 
-## 🎯 Visión General
+## Visión General
 
 Este sistema procesa datos financieros en 5 etapas principales:
 
@@ -26,7 +26,7 @@ Este sistema procesa datos financieros en 5 etapas principales:
 
 ---
 
-## 🔄 Cómo Funciona el Sistema
+## Cómo Funciona el Sistema
 
 ### Paso 1: Extracción de Datos
 
@@ -253,7 +253,7 @@ figures = viz.price_series_plots(series)
 
 ---
 
-## 🧩 Componentes Principales
+## Componentes Principales
 
 ### src/extractors/
 - **BaseExtractor**: Clase abstracta base
@@ -286,7 +286,7 @@ figures = viz.price_series_plots(series)
 
 ---
 
-## 🔄 Flujo de Trabajo Completo
+## Flujo de Trabajo Completo
 
 ### Ejemplo: Análisis Completo de un Activo
 
@@ -338,7 +338,7 @@ print(f"Escenario mejor (95%): ${summary['best_case']:.2f}")
 
 ---
 
-## 💻 Ejemplos de Uso
+## Ejemplos de Uso
 
 ### Ejemplo 1: Análisis Simple de un Activo
 
@@ -405,9 +405,9 @@ print(f"CVaR 5%: ${cvar_5:.2f}")
 
 ---
 
-## 🧪 Testing
+## Testing
 
-Todos los tests muestran el proceso paso a paso. **Los tests de análisis y reporting usan datos reales descargados desde los extractores**, demostrando el flujo completo del sistema.
+Todos los tests muestran el proceso paso a paso, demostrando el flujo completo del sistema.
 
 ```bash
 # Test de extracción (descarga datos)
@@ -446,13 +446,13 @@ Cada test muestra:
 
 ---
 
-## 📊 Ejemplos de Uso Real
+## Ejemplos de Uso Real
 
 El proyecto incluye scripts de ejemplo que demuestran el uso completo del sistema con datos reales:
 
 ### Ejemplo Real (Recomendado)
 
-**`ejemplo_real.py`** - Usa al máximo los métodos integrados de `src`:
+**`ejemplo_real.py`** 
 
 ```bash
 python ejemplo_real.py
@@ -484,25 +484,7 @@ python ejemplo_real.py
   - Escenarios Monte Carlo
   - VaR y CVaR
 
-### Ejemplo Antiguo (Referencia)
-
-**`ejemplo_portfolios_completo.py`** - Versión con lógica duplicada (para referencia):
-
-```bash
-python ejemplo_portfolios_completo.py
-```
-
-**Nota:** Este script guarda outputs en `ejemplos_antiguo/` y muestra cómo se podría hacer sin usar métodos integrados. Se recomienda usar `ejemplo_real.py` en su lugar.
-
-**Ventajas de `ejemplo_real.py`:**
-- ✅ Reutiliza código existente (más mantenible)
-- ✅ Menos código duplicado
-- ✅ Se actualiza automáticamente si cambia la lógica en `src`
-- ✅ Misma funcionalidad con mejor arquitectura
-
----
-
-## 📚 Conceptos Clave
+## Conceptos Clave
 
 ### PriceSeries
 Objeto que encapsula una serie temporal de precios con:
