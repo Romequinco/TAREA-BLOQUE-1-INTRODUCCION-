@@ -238,8 +238,17 @@ Una vez instalado:
    ```bash
    python tests/test_extractors.py
    ```
-3. **Explora el código** en `src/` para entender la implementación
-4. **Crea tus propios scripts** usando los componentes del sistema
+3. **Ejecuta el ejemplo real** para ver el sistema completo en acción:
+   ```bash
+   python ejemplo_real.py
+   ```
+   Esto generará outputs completos en `ejemplos_output/` mostrando:
+   - Extracción de 5 activos reales
+   - 10 portfolios diferentes con diferentes estrategias
+   - Reportes y visualizaciones automáticas
+   - Gráficos comparativos
+4. **Explora el código** en `src/` para entender la implementación
+5. **Crea tus propios scripts** usando los componentes del sistema
 
 ## 📝 Notas Adicionales
 
