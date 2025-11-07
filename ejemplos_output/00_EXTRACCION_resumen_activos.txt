@@ -1,0 +1,42 @@
+================================================================================
+ETAPA 1: EXTRACCIÓN DE ACTIVOS
+================================================================================
+
+Total de activos descargados: 5
+Activos: AAPL, MSFT, GOOGL, AMZN, TSLA
+
+AAPL - Apple Inc.:
+  - Puntos de datos: 249
+  - Rango: 2024-11-07 a 2025-11-07
+  - Precio promedio: $226.62
+  - Volatilidad anualizada: 32.70%
+  - Retorno total: 18.99%
+
+MSFT - Microsoft Corporation:
+  - Puntos de datos: 249
+  - Rango: 2024-11-07 a 2025-11-07
+  - Precio promedio: $454.63
+  - Volatilidad anualizada: 24.46%
+  - Retorno total: 17.39%
+
+GOOGL - Alphabet Inc.:
+  - Puntos de datos: 249
+  - Rango: 2024-11-07 a 2025-11-07
+  - Precio promedio: $191.74
+  - Volatilidad anualizada: 32.59%
+  - Retorno total: 54.17%
+
+AMZN - Amazon.com, Inc.:
+  - Puntos de datos: 249
+  - Rango: 2024-11-07 a 2025-11-07
+  - Precio promedio: $215.36
+  - Volatilidad anualizada: 35.14%
+  - Retorno total: 14.23%
+
+TSLA - Tesla, Inc.:
+  - Puntos de datos: 249
+  - Rango: 2024-11-07 a 2025-11-07
+  - Precio promedio: $347.12
+  - Volatilidad anualizada: 66.80%
+  - Retorno total: 44.29%
+

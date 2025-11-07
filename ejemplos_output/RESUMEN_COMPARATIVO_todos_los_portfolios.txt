@@ -1,0 +1,50 @@
+================================================================================
+RESUMEN COMPARATIVO DE TODOS LOS PORTFOLIOS
+================================================================================
+
+COMPARACIÓN DE MÉTRICAS:
+--------------------------------------------------------------------------------
+Portfolio                      Retorno      Volatilidad  Sharpe     VaR 5%      
+--------------------------------------------------------------------------------
+Portfolio 1 - Equiponderado         34.09%      30.40%     1.12 $   8161.69
+Portfolio 2 - Concentrado en AAPL      29.91%      29.42%     1.02 $   7936.37
+Portfolio 3 - Concentrado en MSFT      28.52%      26.43%     1.08 $   8669.40
+Portfolio 4 - Concentrado en GOOGL      39.79%      29.30%     1.36 $   8907.42
+Portfolio 5 - Concentrado en AMZN      28.67%      30.54%     0.94 $   7466.32
+Portfolio 6 - Concentrado en TSLA      43.56%      42.44%     1.03 $   7050.59
+Portfolio 7 - Tech Pesado           30.41%      26.66%     1.14 $   8392.59
+Portfolio 8 - Crecimiento           34.95%      34.70%     1.01 $   7481.02
+Portfolio 9 - Conservador           27.09%      25.39%     1.07 $   8378.20
+Portfolio 10 - Agresivo             40.41%      38.07%     1.06 $   7484.22
+
+================================================================================
+
+COMPARACIÓN DE ESCENARIOS MONTE CARLO:
+--------------------------------------------------------------------------------
+Portfolio                      Base (50%)      Peor (5%)       Mejor (95%)    
+--------------------------------------------------------------------------------
+Portfolio 1 - Equiponderado    $    13597.49 $     8161.69 $    21611.85
+Portfolio 2 - Concentrado en AAPL $    13361.13 $     7936.37 $    20946.10
+Portfolio 3 - Concentrado en MSFT $    13239.40 $     8669.40 $    19964.63
+Portfolio 4 - Concentrado en GOOGL $    14722.89 $     8907.42 $    24911.67
+Portfolio 5 - Concentrado en AMZN $    13367.66 $     7466.32 $    20504.75
+Portfolio 6 - Concentrado en TSLA $    15179.32 $     7050.59 $    28866.24
+Portfolio 7 - Tech Pesado      $    13282.58 $     8392.59 $    20548.79
+Portfolio 8 - Crecimiento      $    14156.59 $     7481.02 $    23325.62
+Portfolio 9 - Conservador      $    13037.31 $     8378.20 $    19824.11
+Portfolio 10 - Agresivo        $    14799.80 $     7484.22 $    26129.07
+
+================================================================================
+
+RANKING POR SHARPE RATIO:
+--------------------------------------------------------------------------------
+1. Portfolio 4 - Concentrado en GOOGL Sharpe: 1.36
+2. Portfolio 7 - Tech Pesado      Sharpe: 1.14
+3. Portfolio 1 - Equiponderado    Sharpe: 1.12
+4. Portfolio 3 - Concentrado en MSFT Sharpe: 1.08
+5. Portfolio 9 - Conservador      Sharpe: 1.07
+6. Portfolio 10 - Agresivo        Sharpe: 1.06
+7. Portfolio 6 - Concentrado en TSLA Sharpe: 1.03
+8. Portfolio 2 - Concentrado en AAPL Sharpe: 1.02
+9. Portfolio 8 - Crecimiento      Sharpe: 1.01
+10. Portfolio 5 - Concentrado en AMZN Sharpe: 0.94
