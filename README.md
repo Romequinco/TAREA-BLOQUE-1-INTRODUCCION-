@@ -9,7 +9,8 @@ Toolkit completo para extracción, limpieza, análisis y reporting de datos burs
 3. [Componentes Principales](#componentes-principales)
 4. [Flujo de Trabajo Completo](#flujo-de-trabajo-completo)
 5. [Ejemplos de Uso](#ejemplos-de-uso)
-6. [Testing](#testing)
+6. [Ejemplos de Uso Real](#ejemplos-de-uso-real)
+7. [Testing](#testing)
 
 ---
 
@@ -442,6 +443,62 @@ Cada test muestra:
 - Qué datos se están procesando (descargados o generados)
 - Resultados de cada operación
 - Separadores visuales para claridad
+
+---
+
+## 📊 Ejemplos de Uso Real
+
+El proyecto incluye scripts de ejemplo que demuestran el uso completo del sistema con datos reales:
+
+### Ejemplo Real (Recomendado)
+
+**`ejemplo_real.py`** - Usa al máximo los métodos integrados de `src`:
+
+```bash
+python ejemplo_real.py
+```
+
+**Características:**
+- Descarga 5 activos reales (AAPL, MSFT, GOOGL, AMZN, TSLA)
+- Crea 10 portfolios diferentes con diferentes estrategias de pesos
+- Usa métodos integrados: `portfolio.report()`, `portfolio.plots_report()`, `portfolio.monte_carlo()`
+- Genera outputs completos en `ejemplos_output/`:
+  - Resumen de activos descargados
+  - 10 carpetas (una por portfolio) con reportes y visualizaciones
+  - 7 gráficos comparativos mostrando todos los portfolios juntos
+  - Resumen comparativo con rankings
+
+**Outputs generados:**
+- `00_EXTRACCION_resumen_activos.txt` - Resumen de los 5 activos
+- `RESUMEN_COMPARATIVO_todos_los_portfolios.txt` - Comparación completa
+- `Portfolio_01_*/` hasta `Portfolio_10_*/` - Carpetas individuales con:
+  - `resumen_portfolio.txt` - Métricas y composición
+  - `reporte_markdown.md` - Reporte completo generado automáticamente
+  - `visualizacion_*.png` - Gráficos generados automáticamente
+- `COMPARATIVO_*.png` - 7 gráficos comparativos:
+  - Evolución de valor de todas las carteras
+  - Retornos acumulados
+  - Retorno vs Volatilidad
+  - Sharpe Ratio
+  - Distribución de pesos (heatmap)
+  - Escenarios Monte Carlo
+  - VaR y CVaR
+
+### Ejemplo Antiguo (Referencia)
+
+**`ejemplo_portfolios_completo.py`** - Versión con lógica duplicada (para referencia):
+
+```bash
+python ejemplo_portfolios_completo.py
+```
+
+**Nota:** Este script guarda outputs en `ejemplos_antiguo/` y muestra cómo se podría hacer sin usar métodos integrados. Se recomienda usar `ejemplo_real.py` en su lugar.
+
+**Ventajas de `ejemplo_real.py`:**
+- ✅ Reutiliza código existente (más mantenible)
+- ✅ Menos código duplicado
+- ✅ Se actualiza automáticamente si cambia la lógica en `src`
+- ✅ Misma funcionalidad con mejor arquitectura
 
 ---
 
