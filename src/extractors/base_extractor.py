@@ -9,13 +9,12 @@ from typing import List, Optional # Mayor claridad
 from datetime import datetime # Fecha y tiempos
 import pandas as pd # Datos tabulares
 from concurrent.futures import ThreadPoolExecutor, as_completed # Ejecutar peticiones concurrentes
-import logging # Registrar info/errores durante la ejecucion
 
 from ..data_classes import PriceSeries # Importar nuestro PriceSeries
+from ..utils import get_logger
 # .. indica que esta en el paquete padre
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Logger centralizado
+logger = get_logger(__name__)
 # Crear un logger con el nombre del módulo; para info, 
 # errores y advertencias dentro de la clase
 
